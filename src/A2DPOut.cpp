@@ -45,6 +45,10 @@ void A2DP::Out::init(int port, int bufCount, int sampleRate) {
     i2s_set_pin((i2s_port_t)port, &pin_config);
 }
 
+void A2DP::Out::subscribeTo(EventDispatcher &dispatcher) {
+	dispatcher.addAudioConfigSubscriber(this);
+}
+
 void A2DP::Out::setSampleRate(int sampleRate) {
 	i2s_set_clk((i2s_port_t)port, sampleRate, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_STEREO);
 }

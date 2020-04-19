@@ -16,10 +16,6 @@
 
 #define A2DP_EVENT_SINK_TAG	"A2DP_EVENT_SINK"
 
-std::list<A2DP::ConnectionStateSubscriber*> A2DP::EventSink::connectionStateSubscribers;
-std::list<A2DP::AudioStateSubscriber*> A2DP::EventSink::audioStateSubscribers;
-std::list<A2DP::AudioConfigSubscriber*> A2DP::EventSink::audioConfigSubscribers;
-
 A2DP::EventSink::EventSink() {
 }
 
@@ -32,18 +28,6 @@ bool A2DP::EventSink::init() {
     esp_a2d_register_callback(eventCallback);
 
     return true;
-}
-
-void A2DP::EventSink::addConnectionStateSubscriber(A2DP::ConnectionStateSubscriber *s) {
-	connectionStateSubscribers.push_back(s);
-}
-
-void A2DP::EventSink::addAudioStateSubscriber(A2DP::AudioStateSubscriber *s) {
-	audioStateSubscribers.push_back(s);
-}
-
-void A2DP::EventSink::addAudioConfigSubscriber(A2DP::AudioConfigSubscriber *s) {
-	audioConfigSubscribers.push_back(s);
 }
 
 void A2DP::EventSink::eventCallback(esp_a2d_cb_event_t event, esp_a2d_cb_param_t *param) {

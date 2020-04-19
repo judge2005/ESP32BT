@@ -34,6 +34,10 @@ bool A2DP::DataSink::init() {
     return true;
 }
 
+void A2DP::DataSink::subscribeTo(EventDispatcher &dispatcher) {
+	dispatcher.addAudioStateSubscriber(this);
+}
+
 void A2DP::DataSink::started() {
 	pktCount = 0;
 }

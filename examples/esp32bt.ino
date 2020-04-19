@@ -1,17 +1,3 @@
-
-// Copyright 2015-2016 Espressif Systems (Shanghai) PTE LTD
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "esp_system.h"
@@ -27,27 +13,30 @@ A2DP::DataSink a2dpDataSink;
 A2DP::EventSink a2dpEventSink;
 
 void i2sTask(void *arg) {
-    uint8_t *data = NULL;
-    size_t itemSize = 0;
+	uint8_t *data = NULL;
+	size_t itemSize = 0;
 
-    out = new A2DP::Out();
-    out->init();
-    a2dpEventSink.addAudioConfigSubscriber(out);	// Listen for bit rate change
+	out = new A2DP::Out();
+	out->init();
+	out->subscribeTo(a2dpEventSink);	// Listen for bit rate change
 
-	while(true) {
+	while (true) {
 		itemSize = 0;
-        data = a2dpDataSink.waitForData(&itemSize);
-        if (itemSize != 0){
-        	out->play(data, itemSize);
-        	a2dpDataSink.doneWithData(data);
-        }
+		data = a2dpDataSink.waitForData(&itemSize);
+		if (itemSize != 0) {
+			out->play(data, itemSize);
+			a2dpDataSink.doneWithData(data);
+		}
 	}
 }
 
 xTaskHandle i2sTaskHandle = NULL;
 
 class DummyConnectStateSubscriber : public A2DP::ConnectionStateSubscriber {
-
+public:
+	void subscribeTo(A2DP::EventDispatcher &dispatcher) {
+		dispatcher.addConnectionStateSubscriber(this);
+	}
 };
 
 DummyConnectStateSubscriber dummySubscriber;
@@ -68,9 +57,8 @@ void setup()
     a2dpEventSink.init();			// Listen for bluetooth events
 
     // Add event subscriptions for the sink and the output classes
-    a2dpEventSink.addAudioStateSubscriber(&a2dpDataSink);	// For data packet counter reset
-
-    a2dpEventSink.addConnectionStateSubscriber(&dummySubscriber); // So we can see connection state messages in console
+    a2dpDataSink.subscribeTo(a2dpEventSink);	// For data packet counter reset
+    dummySubscriber.subscribeTo(a2dpEventSink); // So we can see connection state messages in console
 
     /* create I2S task */
     xTaskCreate(i2sTask, "I2S", 4096, NULL, configMAX_PRIORITIES - 3, &i2sTaskHandle);

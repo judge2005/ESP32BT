@@ -12,6 +12,8 @@
 #include "freertos/task.h"
 #include "freertos/ringbuf.h"
 
+#include "A2DPEventDispatcher.h"
+
 namespace A2DP {
 	class DataSink : public AudioStateSubscriber {
 	public:
@@ -19,7 +21,9 @@ namespace A2DP {
 		bool init();
 		uint8_t *waitForData(size_t *itemSize);
 		void doneWithData(uint8_t *data);
+		void subscribeTo(EventDispatcher &dispatcher);
 
+		// Event handlers
 		virtual void started();
 
 	private:
