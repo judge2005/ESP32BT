@@ -20,7 +20,9 @@ A2DP::Audio::Audio() {
 }
 
 bool A2DP::Audio::init(const char *deviceName) {
-    btStart();
+	esp_bt_mem_release(ESP_BT_MODE_BLE);
+
+	btStart();
     ESP_LOGI(A2DP_AUDIO_TAG, "btStarted() said: %d", btStarted());
 
     if (esp_bluedroid_init() != ESP_OK) {
@@ -44,3 +46,6 @@ bool A2DP::Audio::init(const char *deviceName) {
     return true;
 }
 
+void A2DP::Audio::stop() {
+	btStop();
+}

@@ -8,9 +8,9 @@
 #ifndef LIBRARIES_ESP32BT_SRC_A2DPEVENTDISPATCHER_H_
 #define LIBRARIES_ESP32BT_SRC_A2DPEVENTDISPATCHER_H_
 
+#include <A2DPAudioStateSubscriber.h>
 #include <list>
 
-#include "A2DPAudioStateSubscriber.h"
 #include "A2DPAudioConfigSubscriber.h"
 #include "A2DPConnectionStateSubscriber.h"
 

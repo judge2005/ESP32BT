@@ -14,6 +14,7 @@ namespace A2DP {
 		Audio();
 
 		bool init(const char *deviceName);
+		void stop();
 	};
 }
 #endif /* LIBRARIES_BT_SRC_A2DPAUDIO_H_ */
