@@ -26,3 +26,14 @@ void A2DP::EventDispatcher::addAudioConfigSubscriber(A2DP::AudioConfigSubscriber
 	audioConfigSubscribers.push_back(s);
 }
 
+void A2DP::EventDispatcher::removeConnectionStateSubscriber(A2DP::ConnectionStateSubscriber *s) {
+	connectionStateSubscribers.remove(s);
+}
+
+void A2DP::EventDispatcher::removeAudioStateSubscriber(A2DP::AudioStateSubscriber *s) {
+	audioStateSubscribers.remove(s);
+}
+
+void A2DP::EventDispatcher::removeAudioConfigSubscriber(A2DP::AudioConfigSubscriber *s) {
+	audioConfigSubscribers.remove(s);
+}

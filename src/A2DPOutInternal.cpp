@@ -16,6 +16,9 @@
 A2DP::OutInternal::OutInternal() {
 }
 
+A2DP::OutInternal::~OutInternal() {
+}
+
 void A2DP::OutInternal::init(int port, int bufCount, int sampleRate) {
 	this->port = port;
 
@@ -25,9 +28,9 @@ void A2DP::OutInternal::init(int port, int bufCount, int sampleRate) {
         bits_per_sample : I2S_BITS_PER_SAMPLE_16BIT, /* the DAC module will only take the 8bits from MSB */
         channel_format : I2S_CHANNEL_FMT_RIGHT_LEFT,		// 2-channels
         communication_format : I2S_COMM_FORMAT_I2S_MSB,		// ?
-        intr_alloc_flags : 0,								// Default interrupt priority
+        intr_alloc_flags : ESP_INTR_FLAG_LEVEL1,			// Lowest interrupt priority
         dma_buf_count : bufCount,
-        dma_buf_len : 60,
+        dma_buf_len : 64,
 		use_apll : false,
         tx_desc_auto_clear : false,							//Auto clear tx descriptor on underflow
 		fixed_mclk: 0

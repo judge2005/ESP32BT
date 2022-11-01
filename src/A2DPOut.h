@@ -17,13 +17,17 @@ namespace A2DP {
 	class Out : public AudioConfigSubscriber {
 	public:
 		Out();
-		virtual void init(int port=0, int bufCount=6, int sampleRate=44100);
+		virtual ~Out();
+		virtual void init(int port=0, int bufCount=8, int sampleRate=44100);
 		virtual void setSampleRate(int sampleRate);
 		virtual size_t play(uint8_t *data, size_t item_size);
 
 		// Event handlers
 		virtual void subscribeTo(EventDispatcher &dispatcher);
+		virtual void unsubscribeFrom(EventDispatcher &dispatcher);
 		virtual void sbc(int sampleRate);
+		virtual void stop();
+		virtual void start();
 
 	protected:
 		int port;

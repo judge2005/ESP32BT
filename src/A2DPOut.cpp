@@ -8,12 +8,20 @@
 #include <A2DPOut.h>
 #include "freertos/FreeRTOS.h"
 #include "driver/i2s.h"
+#include "esp32-hal-log.h"
 
 #define CONFIG_EXAMPLE_I2S_BCK_PIN 26
 #define CONFIG_EXAMPLE_I2S_LRCK_PIN 25
-#define CONFIG_EXAMPLE_I2S_DATA_PIN 22
+#define CONFIG_EXAMPLE_I2S_DATA_PIN 12
 
 A2DP::Out::Out() {
+}
+
+A2DP::Out::~Out() {
+	log_i("Stopping I2S");
+	i2s_stop((i2s_port_t)this->port);
+	i2s_set_dac_mode(I2S_DAC_CHANNEL_DISABLE);
+	i2s_driver_uninstall((i2s_port_t)this->port);
 }
 
 void A2DP::Out::init(int port, int bufCount, int sampleRate) {
@@ -27,7 +35,7 @@ void A2DP::Out::init(int port, int bufCount, int sampleRate) {
         communication_format : I2S_COMM_FORMAT_I2S_MSB,
         intr_alloc_flags : 0,								//Default interrupt priority
         dma_buf_count : bufCount,
-        dma_buf_len : 60,
+        dma_buf_len : 64,
 		use_apll : true,
         tx_desc_auto_clear : true,							//Auto clear tx descriptor on underflow
 		fixed_mclk: 0
@@ -47,6 +55,18 @@ void A2DP::Out::init(int port, int bufCount, int sampleRate) {
 
 void A2DP::Out::subscribeTo(EventDispatcher &dispatcher) {
 	dispatcher.addAudioConfigSubscriber(this);
+}
+
+void A2DP::Out::unsubscribeFrom(EventDispatcher &dispatcher) {
+	dispatcher.removeAudioConfigSubscriber(this);
+}
+
+void A2DP::Out::stop() {
+	i2s_stop((i2s_port_t)port);
+}
+
+void A2DP::Out::start() {
+	i2s_start((i2s_port_t)port);
 }
 
 void A2DP::Out::setSampleRate(int sampleRate) {

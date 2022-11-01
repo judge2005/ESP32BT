@@ -24,6 +24,10 @@ namespace A2DP {
 		void addAudioStateSubscriber(AudioStateSubscriber *s);
 		void addAudioConfigSubscriber(AudioConfigSubscriber *s);
 
+		void removeConnectionStateSubscriber(ConnectionStateSubscriber *s);
+		void removeAudioStateSubscriber(AudioStateSubscriber *s);
+		void removeAudioConfigSubscriber(AudioConfigSubscriber *s);
+
 	protected:
 		static std::list<ConnectionStateSubscriber*> connectionStateSubscribers;
 		static std::list<AudioStateSubscriber*> audioStateSubscribers;

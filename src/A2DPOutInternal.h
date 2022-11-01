@@ -16,6 +16,7 @@ namespace A2DP {
 	class OutInternal : public Out {
 	public:
 		OutInternal();
+		virtual ~OutInternal();
 		virtual void init(int port=0, int bufCount=6, int sampleRate=44100);
 		virtual void setSampleRate(int sampleRate);
 		virtual size_t play(uint8_t *data, size_t item_size);
